@@ -1,0 +1,29 @@
+{
+  "name": "wetube",
+  "version": "1.0.0",
+  "description": "The best way to watch videos.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec babel-node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CheonjiKim/wetube-reloaded.git"
+  },
+  "author": "Cheonji Kim",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CheonjiKim/wetube-reloaded/issues"
+  },
+  "homepage": "https://github.com/CheonjiKim/wetube-reloaded#readme",
+  "dependencies": {
+    "@babel/node": "^7.20.7",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "nodemon": "^2.0.20"
+  }
+}
