@@ -15,9 +15,8 @@ export const home = (req, res) =>{
 */
 export const home = async (req, res) => {
   try {
-    console.log("First");
     const videos = await Video.find({});
-    console.log("Second");
+    console.log(videos);
     return res.render("home", {pageTitle: "Home", videos: videos});
   } catch {
     return res.render("server-error");
@@ -45,7 +44,7 @@ export const getUpload = (req, res) => {
   return res.render("upload", {pageTitle: "Upload a Video"});
 };
 
-export const postUpload = (req, res) => {
+export const postUpload = async (req, res) => {
   const {title, description, hashtags} = req.body;
   console.log(title, description, hashtags);
   const video = new Video({
@@ -58,6 +57,6 @@ export const postUpload = (req, res) => {
       rating: 0,
     },
   })
-  console.log(video);
+  await video.save(); // 이 코드를 사용하지 않고, video.create()를 사용할 수도 있다.
   return res.redirect("/");
 };
