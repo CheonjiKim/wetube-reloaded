@@ -16,7 +16,7 @@ export const home = (req, res) =>{
 export const home = async (req, res) => {
   try {
     const videos = await Video.find({});
-    console.log(videos);
+    //console.log(videos);
     return res.render("home", {pageTitle: "Home", videos: videos});
   } catch {
     return res.render("server-error");
@@ -43,20 +43,17 @@ export const postEdit = (req, res) => {
 export const getUpload = (req, res) => {
   return res.render("upload", {pageTitle: "Upload a Video"});
 };
-
 export const postUpload = async (req, res) => {
   const {title, description, hashtags} = req.body;
-  console.log(title, description, hashtags);
-  const video = new Video({
-    title,
-    description,
-    createdAt: Date.now(),
-    hashtags: hashtags.split(",").map(word => `#${word}`),
-    meta: {
-      views:0,
-      rating: 0,
-    },
-  })
-  await video.save(); // 이 코드를 사용하지 않고, video.create()를 사용할 수도 있다.
-  return res.redirect("/");
+  try {
+    await Video.create({
+      title,
+      description,
+      createdAt: Date.now(),
+      hashtags: hashtags.split(",").map(word => `#${word}`),
+    });
+    return res.redirect("/");
+  } catch (error) {
+    return res.render("upload", {pageTitle: "Upload a Video", errorMsg: error._message});
+  }
 };

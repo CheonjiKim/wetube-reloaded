@@ -1,6 +1,8 @@
 extends base.pug
 
 block content
+    if errorMsg
+        span=errorMsg
     form(method="POST")
         //- 모든 input tag는 name이 있어야 한다.
         input(placeholder="Title", required, type="text", name="title")
