@@ -1,6 +1,5 @@
 import Video from "../models/Video";
 
-
 /*
 // 6.11 에서 Model.find()함수를 callback을 이용하여 구현하려고 했으나
 // 더 이상 callback을 지원하지 않는다고 한다.
@@ -23,10 +22,13 @@ export const home = async (req, res) => {
   }
 };
 
-export const watch = (req, res) => {
+export const watch =  async (req, res) => {
   const id = req.params.id; // another equivalent code for this line -> const { id } = req.params;
+  const video = await Video.findById(id);
+  console.log(video);
   return res.render("watch", {
-    pageTitle: `Watching`,
+    pageTitle: video.title,
+    video
   });
 };
 export const getEdit = (req, res) => {
