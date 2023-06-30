@@ -21,20 +21,26 @@ export const home = async (req, res) => {
     return res.render("server-error");
   }
 };
-
+// ES6
 export const watch =  async (req, res) => {
   const id = req.params.id; // another equivalent code for this line -> const { id } = req.params;
   const video = await Video.findById(id);
   console.log(video);
-  return res.render("watch", {
-    pageTitle: video.title,
-    video
-  });
+  if(!video) { // 에러가 발생하는 경우를 처리하는 if문
+    return res.render("404", {pageTitle: "Video Not Found."});
+  }
+  return res.render("watch", {pageTitle: video.title, video });
 };
-export const getEdit = (req, res) => {
+
+export const getEdit = async (req, res) => {
   const id = req.params.id;
-  res.render("Edit", { pageTitle: `Editing` });
+  const video = await Video.findById(id);
+  if(!video) { // 에러가 발생하는 경우를 처리하는 if문
+    return res.render("404", {pageTitle: "Video Not Found."});
+  }
+  res.render("Edit", { pageTitle: `Edit ${video.title}`, video: video});
 };
+
 export const postEdit = (req, res) => {
   const id = req.params.id;
   const title = req.body.title;
