@@ -16,60 +16,71 @@ export const home = async (req, res) => {
   try {
     const videos = await Video.find({});
     //console.log(videos);
-    return res.render("home", {pageTitle: "Home", videos: videos});
+    return res.render("home", { pageTitle: "Home", videos: videos });
   } catch {
     return res.render("server-error");
   }
 };
 // ES6
-export const watch =  async (req, res) => {
+export const watch = async (req, res) => {
   const id = req.params.id; // another equivalent code for this line -> const { id } = req.params;
   const video = await Video.findById(id);
   //console.log(video);
-  if(!video) { // 에러가 발생하는 경우를 처리하는 if문
-    return res.render("404", {pageTitle: "Video Not Found."});
+  if (!video) {
+    // 에러가 발생하는 경우를 처리하는 if문
+    return res.render("404", { pageTitle: "Video Not Found." });
   }
-  return res.render("watch", {pageTitle: video.title, video });
+  return res.render("watch", { pageTitle: video.title, video });
 };
 
 export const getEdit = async (req, res) => {
   const id = req.params.id;
   const video = await Video.findById(id);
-  if(!video) { // 에러가 발생하는 경우를 처리하는 if문
-    return res.render("404", {pageTitle: "Video Not Found."});
+  if (!video) {
+    // 에러가 발생하는 경우를 처리하는 if문
+    return res.render("404", { pageTitle: "Video Not Found." });
   }
-  res.render("Edit", { pageTitle: `Edit ${video.title}`, video: video});
+  res.render("Edit", { pageTitle: `Edit ${video.title}`, video: video });
 };
 
 export const postEdit = async (req, res) => {
   const { id } = req.params;
-  const {title, description, hashtags} = req.body;
-  const video = await Video.findById(id);
-  if(!video) { // 에러가 발생하는 경우를 처리하는 if문
-    return res.render("404", {pageTitle: "Video Not Found."});
+  const { title, description, hashtags } = req.body;
+  const video = await Video.exists({ _id: id });
+  if (!video) {
+    // 에러가 발생하는 경우를 처리하는 if문
+    return res.render("404", { pageTitle: "Video Not Found." });
   }
-  video.title = title;
-  video.description = description;
-  video.hashtags = hashtags.split(",").map(word => word.startsWith('#') ? word : `#${word}`);
-  await video.save();
+  await Video.findByIdAndUpdate(id, {
+    title,
+    description,
+    hashtags: hashtags
+      .split(",")
+      .map((word) => (word.startsWith("#") ? word : `#${word}`)),
+  });
   return res.redirect(`/videos/${id}`);
 };
 
 export const getUpload = (req, res) => {
-  return res.render("upload", {pageTitle: "Upload a Video"});
+  return res.render("upload", { pageTitle: "Upload a Video" });
 };
 
 export const postUpload = async (req, res) => {
-  const {title, description, hashtags} = req.body;
+  const { title, description, hashtags } = req.body;
   try {
     await Video.create({
       title,
       description,
       createdAt: Date.now(),
-      hashtags: hashtags.split(",").map(word => word.startsWith('#') ? word : `#${word}`);,
+      hashtags: hashtags
+        .split(",")
+        .map((word) => (word.startsWith("#") ? word : `#${word}`)),
     });
     return res.redirect("/");
   } catch (error) {
-    return res.render("upload", {pageTitle: "Upload a Video", errorMsg: error._message});
+    return res.render("upload", {
+      pageTitle: "Upload a Video",
+      errorMsg: error._message,
+    });
   }
 };
