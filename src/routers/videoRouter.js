@@ -1,5 +1,12 @@
 import express from "express";
-import { watch, getEdit, postEdit, getUpload, postUpload } from "../controllers/videoController";
+import {
+  watch,
+  getEdit,
+  postEdit,
+  getUpload,
+  postUpload,
+  deleteVideo,
+} from "../controllers/videoController";
 
 const videoRouter = express.Router();
 
@@ -8,6 +15,7 @@ const videoRouter = express.Router();
 // 정규식은 개발에서 많이 쓰이기 때문에 공부해두는 것이 좋다.
 videoRouter.get("/:id([0-9a-f]{24})", watch);
 videoRouter.route("/:id([0-9a-f]{24})/edit").get(getEdit).post(postEdit);
+videoRouter.route("/:id([0-9a-f]{24})/delete").get(deleteVideo);
 videoRouter.route("/upload").get(getUpload).post(postUpload);
 
 export default videoRouter;
