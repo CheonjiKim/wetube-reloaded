@@ -3,10 +3,7 @@ include ./mixins/video.pug
 
 
 block content
-    h1 Home!
-    h2 Welcome here you can see the trending videos.
-        ul
-            each video in videos
-                +video(video)
-            else 
-                li Sorry nothing found.
+    each video in videos
+        +video(video)
+    else 
+        li Sorry nothing found.

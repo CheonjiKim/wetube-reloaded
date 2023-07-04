@@ -93,7 +93,7 @@ export const search = async (req, res) => {
   if ( keyword ) {
       videos = await Video.find({
       title: {
-        $regex: new RegExp(`${keyword}$`, "i"),
+        $regex: new RegExp(`${keyword}$`, "i"), // 정규식으로 검색 대상을 다양하게 설정할 수 있다.
       },
     });
   }
