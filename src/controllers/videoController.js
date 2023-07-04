@@ -14,7 +14,7 @@ export const home = (req, res) =>{
 */
 export const home = async (req, res) => {
   try {
-    const videos = await Video.find({});
+    const videos = await Video.find({}).sort({createdAt:"desc"});
     //console.log(videos);
     return res.render("home", { pageTitle: "Home", videos: videos });
   } catch {
@@ -85,4 +85,12 @@ export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   await Video.findByIdAndDelete(id);
   return res.redirect("/");
+};
+
+export const search = (req, res) => {
+  const {keyword} = req.query;
+  if (keyword) {
+    //search
+  }
+  return res.render("search", {pageTitle: "search"});
 };
