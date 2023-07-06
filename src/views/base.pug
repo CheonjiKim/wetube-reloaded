@@ -4,23 +4,29 @@ doctype html
 html(lang="en")
     head
         meta(charset="UTF-8")
-        meta(http-equiv="X-UA-Compatible", content="IE=edge")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
         link(rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css")
-        title #{pageTitle}
+        title #{pageTitle} | #{siteName}
     body
         header
             h1=pageTitle
             nav 
                 ul 
                     li 
-                        a(href="/videos/upload") Upload a Video
-                    li 
-                        a(href="/") Home
+                        a(href="/") Home  
+                    if loggedIn
+                        li
+                            a(href="/logout") Log Out
+                        li
+                            a(href="/my-profile") #{loggedInUser.name}의 Profile
+                    else
+                        li 
+                            a(href="/login") Login
+                        li
+                            a(href="/join") Join
                     li 
                         a(href="/search") Search
-                    li
-                        a(href="/join") Join
+                    li 
+                        a(href="/videos/upload") Upload a Video
 
         main
             block content
