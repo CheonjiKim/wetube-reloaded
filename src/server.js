@@ -1,3 +1,4 @@
+
 import express from "express";
 import morgan from "morgan";
 import session from "express-session";
@@ -15,19 +16,12 @@ app.use(logger); // 이 코드가 다른 app.use()보다 상단에 위치해야�
 app.use(express.urlencoded({extended: true})); // This code makes Express understand HTML forms and values.
 
 app.use(session({
-    secret: "Hello",
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: "mongodb://127.0.0.1:27017/wetube"}),
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL}),
     })
 );
-
-// app.use((req, res, next) => {
-//     req.sessionStore.all((error, sesstions) => {
-//         console.log(req.session);
-//         next();
-//     });
-// });
 
 app.use(localsMiddleware);
 app.use("/", rootRouter);
@@ -35,4 +29,3 @@ app.use("/user", userRouter);
 app.use("/videos", videoRouter);
 
 export default app;
-
