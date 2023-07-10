@@ -25,7 +25,7 @@ app.use(session({
 
 app.use(localsMiddleware);
 app.use("/", rootRouter);
-app.use("/user", userRouter);  
+app.use("/users", userRouter);  
 app.use("/videos", videoRouter);
 
 export default app;
