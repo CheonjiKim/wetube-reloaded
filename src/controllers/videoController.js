@@ -2,7 +2,7 @@ import Video from "../models/Video";
 
 export const home = async (req, res) => {
   try {
-    const videos = await Video.find({}).sort({createdAt:"desc"});
+    const videos = await Video.find({}).sort({ createdAt: "desc" });
     //console.log(videos);
     return res.render("home", { pageTitle: "Home", videos: videos });
   } catch {
@@ -76,14 +76,14 @@ export const deleteVideo = async (req, res) => {
 };
 
 export const search = async (req, res) => {
-  const {keyword} = req.query;
+  const { keyword } = req.query;
   let videos = [];
-  if ( keyword ) {
-      videos = await Video.find({
+  if (keyword) {
+    videos = await Video.find({
       title: {
         $regex: new RegExp(`${keyword}$`, "i"), // 정규식으로 검색 대상을 다양하게 설정할 수 있다.
       },
     });
   }
-  return res.render("search", {pageTitle: "Search", videos});
+  return res.render("search", { pageTitle: "Search", videos });
 };
