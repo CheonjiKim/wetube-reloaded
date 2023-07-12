@@ -154,8 +154,33 @@ export const getEdit = (req, res) => {
   return res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
-export const postEdit = (req, res) => {
-  return res.render("edit-profile");
+export const postEdit = async (req, res) => {
+  // session은 유저의 정보를 가지고 있으므로 거기서 id를 가져올 수 있다.
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  // 아래의 두 코드는  ES6를 이용하여 만든 위 코드 const {...}와 로직이 같다.
+  // const id = req.session.user.id;
+  // const { name, email, username, location } = req.body;
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+
+  req.session.user = updatedUser;
+
+  return res.redirect("/users/edit");
 };
 
 export const see = (req, res) => res.send("See user");

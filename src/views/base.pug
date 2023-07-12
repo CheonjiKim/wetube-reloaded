@@ -14,6 +14,8 @@ html(lang="en")
                     li 
                         a(href="/") Home  
                     if loggedIn
+                        li 
+                            a(href="/videos/upload") Upload a Video
                         li
                             a(href="/users/edit") Edit Profile
                         li
@@ -27,8 +29,6 @@ html(lang="en")
                             a(href="/join") Join
                     li 
                         a(href="/search") Search
-                    li 
-                        a(href="/videos/upload") Upload a Video
 
         main
             block content
