@@ -5,7 +5,6 @@ import session from "express-session";
 
 export const getJoin = (req, res) => res.render("join", { pageTitle: "Join" });
 export const postJoin = async (req, res) => {
-  console.log(req.body);
   const { name, email, username, password, password2, location } = req.body;
   const pageTitle = "join";
 
@@ -157,29 +156,51 @@ export const getEdit = (req, res) => {
 export const postEdit = async (req, res) => {
   // session은 유저의 정보를 가지고 있으므로 거기서 id를 가져올 수 있다.
   const {
+    // const id = req.session.user.id;
+    // const { name, email, username, location } = req.body;
     session: {
       user: { _id },
     },
     body: { name, email, username, location },
   } = req;
 
-  // 아래의 두 코드는  ES6를 이용하여 만든 위 코드 const {...}와 로직이 같다.
-  // const id = req.session.user.id;
-  // const { name, email, username, location } = req.body;
+  // 1. 유저가 username이나 email 업데이트 하려는 것을 파악해야 한다.
+  // 2. 유저가 입력한 값이 겹치는지를 확인한다.
+  // 3. 겹치지 않으면 업데이트를 진행하고, 겹치면 업데이트를 막는다.
+
+  // when a user tries to change username
+  if (username != req.session.user.username) {
+    const existsUsername = await User.exists({ username });
+    if (existsUsername != null) {
+      console.log("username collides!");
+      return res.render("edit-profile", {
+        errorMessage: "the username is already used by another user.",
+      });
+    }
+  }
+
+  // when a user tries to change email
+  if (email != req.session.user.email) {
+    const existsEmail = await User.exists({ email });
+    if (existsEmail != null) {
+      console.log("email collides!");
+      return res.render("edit-profile", {
+        errorMessage: "the email is already used by another user.",
+      });
+    }
+  }
 
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
-      name,
-      email,
-      username,
-      location,
+      name: name,
+      email: email,
+      username: username,
+      location: location,
     },
     { new: true }
   );
-
   req.session.user = updatedUser;
-
   return res.redirect("/users/edit");
 };
 
