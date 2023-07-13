@@ -164,11 +164,7 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
   } = req;
 
-  // 1. 유저가 username이나 email 업데이트 하려는 것을 파악해야 한다.
-  // 2. 유저가 입력한 값이 겹치는지를 확인한다.
-  // 3. 겹치지 않으면 업데이트를 진행하고, 겹치면 업데이트를 막는다.
-
-  // when a user tries to change username
+  // when a user tries to change username/email
   if (
     username != req.session.user.username ||
     email != req.session.user.email
@@ -177,7 +173,6 @@ export const postEdit = async (req, res) => {
     const existsEmail = await User.exists({ email });
 
     if (existsUsername != null || existsEmail != null) {
-      console.log("the username or email collides!");
       return res.render("edit-profile", {
         errorMessage:
           "the username/email is already taken. Please try another.",
