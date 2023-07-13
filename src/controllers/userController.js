@@ -169,23 +169,18 @@ export const postEdit = async (req, res) => {
   // 3. 겹치지 않으면 업데이트를 진행하고, 겹치면 업데이트를 막는다.
 
   // when a user tries to change username
-  if (username != req.session.user.username) {
+  if (
+    username != req.session.user.username ||
+    email != req.session.user.email
+  ) {
     const existsUsername = await User.exists({ username });
-    if (existsUsername != null) {
-      console.log("username collides!");
-      return res.render("edit-profile", {
-        errorMessage: "the username is already used by another user.",
-      });
-    }
-  }
-
-  // when a user tries to change email
-  if (email != req.session.user.email) {
     const existsEmail = await User.exists({ email });
-    if (existsEmail != null) {
-      console.log("email collides!");
+
+    if (existsUsername != null || existsEmail != null) {
+      console.log("the username or email collides!");
       return res.render("edit-profile", {
-        errorMessage: "the email is already used by another user.",
+        errorMessage:
+          "the username/email is already taken. Please try another.",
       });
     }
   }
