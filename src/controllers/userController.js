@@ -116,7 +116,7 @@ export const finishGithubLogin = async (req, res) => {
       (email) => email.primary === true && email.verified === true
     );
 
-    console.log(emailObj);
+    //console.log(emailObj);
     if (!emailObj) {
       //console.log("======1======");
       return res.redirect("/login");
@@ -159,9 +159,10 @@ export const postEdit = async (req, res) => {
     // const id = req.session.user.id;
     // const { name, email, username, location } = req.body;
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
 
   // when a user tries to change username/email
@@ -183,6 +184,7 @@ export const postEdit = async (req, res) => {
   const updatedUser = await User.findByIdAndUpdate(
     _id,
     {
+      avatarUrl: file ? file.path : avatarUrl,
       name: name,
       email: email,
       username: username,
@@ -209,6 +211,7 @@ export const postChangePassword = async (req, res) => {
   } = req;
   const user = await User.findById(_id);
   const ok = await bcrypt.compare(oldPassword, user.password);
+
   if (!ok) {
     return res.status(400).render("users/change-password", {
       pageTitle: "Change Password",

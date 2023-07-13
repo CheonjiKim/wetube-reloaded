@@ -1,3 +1,5 @@
+import multer from "multer";
+
 export const localsMiddleware = (req, res, next) => {
   // locals에 있는 element들은 views에서 접근이 가능하다.
   res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -21,3 +23,5 @@ export const publicOnlyMiddleware = (req, res, next) => {
     return res.redirect("/");
   }
 };
+
+export const uploadFiles = multer({ dest: "uploads/" });
