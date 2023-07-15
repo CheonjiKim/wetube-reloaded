@@ -1,5 +1,4 @@
 import express from "express";
-import multer from "multer";
 import {
   logout,
   see,
@@ -13,7 +12,7 @@ import {
 import {
   protectorMiddleware,
   publicOnlyMiddleware,
-  uploadFiles,
+  avatarUpload,
 } from "../middlewares";
 
 const userRouter = express.Router();
@@ -23,7 +22,7 @@ userRouter
   .route("/edit")
   .all(protectorMiddleware)
   .get(getEdit)
-  .post(uploadFiles.single("avatar"), postEdit);
+  .post(avatarUpload.single("avatar"), postEdit);
 userRouter.get("/github/start", publicOnlyMiddleware, startGithubLogin);
 userRouter.get("/github/finish", publicOnlyMiddleware, finishGithubLogin);
 userRouter
