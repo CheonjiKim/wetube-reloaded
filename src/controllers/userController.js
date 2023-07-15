@@ -164,6 +164,7 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
     file,
   } = req;
+  //console.log(file);
 
   // when a user tries to change username/email
   if (
