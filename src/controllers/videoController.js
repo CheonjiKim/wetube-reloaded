@@ -13,14 +13,13 @@ export const home = async (req, res) => {
 
 export const watch = async (req, res) => {
   const id = req.params.id;
-  const video = await Video.findById(id);
-  const owner = await User.findById(video.owner);
-  //console.log(video);
+  const video = await Video.findById(id).populate("owner");
+  console.log(video);
   if (!video) {
     // 에러가 발생하는 경우를 처리하는 if문
     return res.status(404).render("404", { pageTitle: "Video Not Found." });
   }
-  return res.render("watch", { pageTitle: video.title, video, owner });
+  return res.render("watch", { pageTitle: video.title, video });
 };
 
 export const getEdit = async (req, res) => {
