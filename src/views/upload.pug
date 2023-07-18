@@ -1,10 +1,9 @@
 extends base.pug
 
 block content
-    if errorMsg
+    if errorMessage
         span=errorMessage
     form(method="POST", enctype="multipart/form-data")
-        //- 모든 input tag는 name이 있어야 한다.
         label(for="video") Video File
         input(type="file", accept="video/*", required, id="video", name="video")
         input(placeholder="Title", required, type="text", name="title", maxlength=80)
