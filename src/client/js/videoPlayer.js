@@ -11,7 +11,6 @@ const fullScreenBtn = document.getElementById("fullScreen");
 const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
-const body = document.querySelector("body");
 
 let controlsTimeout = null;
 let controlsMovementTimeout = null;
@@ -52,7 +51,7 @@ const handleVolumeChange = (event) => {
 };
 
 const formatTime = (seconds) =>
-  new Date(seconds * 1000).toISOString().substring(14, 19);
+  new Date(seconds * 1000).toISOString().substr(14, 5);
 
 const handleLoadedMetadata = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
@@ -101,40 +100,20 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 
-const handleVideoClickPlay = () => {
-  if (video.paused) {
-    video.play();
-  } else {
-    video.pause();
-  }
-  playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
-};
-
-const handleBodyKeydownPlay = (event) => {
-  if (event.keyCode === 32) {
-    if (video.paused) {
-      video.play();
-    } else {
-      video.pause();
-    }
-    playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
-  }
-};
-
 const handleEnded = () => {
   const { id } = videoContainer.dataset;
-  fetch(`/api/videos/${id}/view`, { method: "POST" });
+  fetch(`/api/videos/${id}/view`, {
+    method: "POST",
+  });
 };
 
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 volumeRange.addEventListener("input", handleVolumeChange);
-video.addEventListener("loadeddata", handleLoadedMetadata);
+video.addEventListener("loadedmetadata", handleLoadedMetadata);
 video.addEventListener("timeupdate", handleTimeUpdate);
-video.addEventListener("click", handleVideoClickPlay);
 video.addEventListener("ended", handleEnded);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 timeline.addEventListener("input", handleTimelineChange);
 fullScreenBtn.addEventListener("click", handleFullscreen);
-body.addEventListener("keydown", handleBodyKeydownPlay);
